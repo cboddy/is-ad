@@ -18,3 +18,11 @@ def zip_open(path, name):
     with zipfile.ZipFile(path, 'r') as z_file:
         with z_file.open(name) as f:
             yield f
+
+
+@contextlib.contextmanager
+def zip_open_all(path):
+    with zipfile.ZipFile(path, 'r') as z_file:
+        for name in z_file.namelist():
+            with z_file.open(name) as f:
+                yield name, f
