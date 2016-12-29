@@ -71,16 +71,22 @@ def _is_visible(element):
         return False
     elif re.match('<!--.*-->', as_str):
         return False
-    elif as_str.replace(' ', '') == '\n':
+    if not len(''.join(as_str.split())):
         return False
     return True
 
 
 def unzip_and_extract_text(zip_path, output_path):
-
+    logging.info('Running  text extraction for {} -> {}'.format(zip_path, output_path))
     with zipfile.ZipFile(output_path, 'w') as z_out:
-        for name, iterator in zip_open_all(zip_path):
-            LOG.debug('Writing {}'.format(name))
-            texts = parse_texts(iterator)
-            text = ''.join(texts)
-            z_out.writestr(name, text)
+            for name, iterator in zip_open_all(zip_path):
+                LOG.debug('Writing {}'.format(name))
+                try:
+                    texts = parse_texts(iterator)
+                    text = ''.join(texts)
+                except Exception:
+                    logging.error('Problem extracting text from {}/{}'.format(zip_path, name), exc_info=True)
+                    continue
+
+                z_out.writestr(name, text)
+

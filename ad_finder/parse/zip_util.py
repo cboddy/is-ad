@@ -28,7 +28,7 @@ def zip_open_all(path):
     with zipfile.ZipFile(path, 'r') as z_file:
         namelist = z_file.namelist()
         for name in namelist:
-            if count % 100 == 0:
+            if count % 500 == 0:
                 logging.info('{} completed {:.3f}.'.format(path, float(count) / len(namelist)))
             count += 1
             with z_file.open(name) as f:
