@@ -5,6 +5,8 @@
 
 ### tech
 [scikit-learn](http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html)
+bs4
+
 
 ###  ideas
 * bag of words

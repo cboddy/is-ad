@@ -1,20 +1,39 @@
 import re
-from BeautifulSoup import BeautifulSoup
+import time
+import logging
+import os
+import zipfile
+from functools import wraps
+from bs4 import BeautifulSoup
 from ad_finder.parse.zip_util import zip_open_all
-
 NON_VISIBLE_LABELS = ['style', 'script', '[document]', 'head', 'title']
+LOG = logging.getLogger(__name__)
 
 
-def parse_zip(zip_path):
-    has_entry = False
+def log_time(func):
+    """Utility decorator for profiling method calls."""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        duration = end_time - start_time
+        msg = ' '.join([func.__name__, '(',str(args), str(kwargs), ')',
+                        'took', str(duration), 'seconds.'])
+        # LOG.info(msg)
+        print(msg)
+        return result
+    return wrapper
+
+
+@log_time
+def parse_zip(zip_path, text_consumer):
     for name, z_open in zip_open_all(zip_path):
-        assert name == '0/1000188_raw_html.txt'
-        assert len(z_open.readlines()) == 1086
-        has_entry = True
-    assert has_entry
+        text = parse_texts(z_open)
+        text_consumer(name, text)
 
 
-def parse_text(iterator):
+def parse_texts(iterator):
     """
     Filter the visible text from an html doc.
 
@@ -28,7 +47,7 @@ def parse_text(iterator):
     list[str]
     Visible text filtered from the html doc.
     """
-    soup = BeautifulSoup(iterator)
+    soup = BeautifulSoup(iterator, 'lxml')
     text_elements = soup.findAll(text=True)
     visible_texts = [elem for elem in text_elements if _is_visible(elem)]
     return visible_texts
@@ -52,8 +71,16 @@ def _is_visible(element):
         return False
     elif re.match('<!--.*-->', as_str):
         return False
-    elif as_str == '\n':
+    elif as_str.replace(' ', '') == '\n':
         return False
     return True
 
 
+def unzip_and_extract_text(zip_path, output_path):
+
+    with zipfile.ZipFile(output_path, 'w') as z_out:
+        for name, iterator in zip_open_all(zip_path):
+            LOG.debug('Writing {}'.format(name))
+            texts = parse_texts(iterator)
+            text = ''.join(texts)
+            z_out.writestr(name, text)
