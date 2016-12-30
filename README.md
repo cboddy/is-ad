@@ -8,6 +8,10 @@
 bs4
 
 
+### scikit-learn
+
+building a pipeline
+
 ###  ideas
 * bag of words
 * number of links

@@ -69,7 +69,7 @@ def _is_visible(element):
     as_str = str(element)
     if element.parent.name in NON_VISIBLE_LABELS:
         return False
-    elif re.match('<!--.*-->', as_str):
+    if re.match('<!--.*-->', as_str):
         return False
     if not len(''.join(as_str.split())):
         return False
@@ -78,7 +78,7 @@ def _is_visible(element):
 
 def unzip_and_extract_text(zip_path, output_path):
     logging.info('Running  text extraction for {} -> {}'.format(zip_path, output_path))
-    with zipfile.ZipFile(output_path, 'w') as z_out:
+    with zipfile.ZipFile(output_path, 'w', allowZip64=True) as z_out:
             for name, iterator in zip_open_all(zip_path):
                 LOG.debug('Writing {}'.format(name))
                 try:
