@@ -17,7 +17,6 @@ def run(pipeline_input,
     pipeline_input: `PipelineInput`
     pipeline_name: `str`
     """
-
     pipeline = get_pipeline(pipeline_name)
 
     train_docs = pipeline_input.train_docs()
@@ -33,6 +32,5 @@ def run(pipeline_input,
     logging.info('Average success rate {:.3f}.'.format(mean))
 
     report = metrics.classification_report(predicted_cats,
-                                           test_doc_categories,
-                                           labels=['not ad', 'is ad'])
+                                           test_doc_categories)
     print(report)

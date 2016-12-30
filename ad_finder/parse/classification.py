@@ -35,7 +35,7 @@ def get_classifications(lines):
     dict[str, bool]
         A dictionary of entry-names  where the value is True iff it is a native-ad.
     """
-    header = next(lines)  #skip header
+    next(lines) # skip header
 
     parsed = (_parse(line) for line in lines)
     return {entry: is_ad for entry, is_ad in parsed}

@@ -57,7 +57,9 @@ class PipelineInput(object):
                 count += 1
                 if self.max_doc_count != -1 and self.max_doc_count < count:
                     break
-                if not (skip_train ^ (count % self.n_skip)):
+                if skip_train and count % self.n_skip != 0:
+                    continue
+                if not skip_train and not count % self.n_skip:
                     continue
                 lines = f_handle.readlines()
                 yield ''.join(lines)
@@ -73,6 +75,9 @@ class PipelineInput(object):
                 count += 1
                 if self.max_doc_count != -1 and self.max_doc_count < count:
                     break
-                if not (skip_train ^ (count % self.n_skip)):
+                if skip_train and count % self.n_skip != 0:
                     continue
+                if not skip_train and not count % self.n_skip:
+                    continue
+
                 yield int(self.classification_dict[last_name])
