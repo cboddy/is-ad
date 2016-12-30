@@ -30,8 +30,10 @@ def main():
 
     if os.path.isdir(args.docs):
         input_files = [os.listdir(args.docs)]
-    elif  os.path.isfile(args.docs):
+    elif os.path.isfile(args.docs):
         input_files = [args.docs]
+    else:
+        raise ValueError('{} is not a directory or a file.'.format(args.docs))
 
     logging.info('''Running {pipeline_name} pipeline,
     input files: {input_files},
