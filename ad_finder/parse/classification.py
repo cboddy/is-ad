@@ -1,6 +1,6 @@
 import os.path
 
-from ad_finder.parse.zip_util import zip_open
+from ad_finder.util.zip_util import zip_open
 
 
 def parse_classifications(zip_path):

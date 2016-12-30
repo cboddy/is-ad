@@ -16,3 +16,5 @@ building a pipeline
 * bag of words
 * number of links
 
+### running a pipeline example
+> python ad_finder/scripts/run_pipeline.py --docs /home/chrirs/other/dato.native/text_extracted/0.zip --categories /home/chrirs/other/dato.native/train_v2.csv.zip --test_fraction 0.1 --max_doc_count 10000

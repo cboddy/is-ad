@@ -23,14 +23,18 @@ def zip_open(path, name):
             yield f
 
 
-
 def zip_open_all(path):
     count = 0
     with zipfile.ZipFile(path, 'r') as z_file:
         namelist = z_file.namelist()
         for name in namelist:
-            if count % 500 == 0:
+            if count % 1000 == 0:
                 logging.info('{} completed {:.3f}.'.format(path, float(count) / len(namelist)))
             count += 1
             with z_file.open(name) as f:
                 yield (name, f)
+
+
+def get_namelist(zip_path):
+    with zipfile.ZipFile(zip_path, 'r') as z_file:
+        return z_file.namelist()

@@ -1,11 +1,12 @@
+import logging
 import re
 import time
-import logging
-import os
 import zipfile
 from functools import wraps
+
+from ad_finder.util.zip_util import zip_open_all
 from bs4 import BeautifulSoup
-from ad_finder.parse.zip_util import zip_open_all
+
 NON_VISIBLE_LABELS = ['style', 'script', '[document]', 'head', 'title']
 LOG = logging.getLogger(__name__)
 
