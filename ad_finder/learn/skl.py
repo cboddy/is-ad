@@ -1,9 +1,9 @@
 import logging
 import numpy as np
 from sklearn import metrics
+from sklearn.model_selection import GridSearchCV
 from ad_finder.learn.pipelines import get_pipeline
 from ad_finder.learn.pipeline_input import PipelineInput
-
 
 LOG = logging.getLogger(__name__)
 
@@ -26,10 +26,46 @@ def run(pipeline_input,
                             train_doc_categories)
 
     predicted_cats = text_clf.predict(pipeline_input.test_docs())
+    test_doc_categories = pipeline_input.test_doc_categories()
+
+    mean = np.mean(predicted_cats == test_doc_categories)
+    logging.info('Average success rate {:.3f}.'.format(mean))
+
+    report = metrics.classification_report(predicted_cats,
+                                           test_doc_categories)
+    print(report)
+
+
+def run_grid_optimization(pipeline_input,
+                          pipeline_name):
+
+    pipeline = get_pipeline(pipeline_name)
+
+    parameters = {
+        'vect__ngram_range': [(1, 1), (1, 2),],
+        # 'tfidf__use_idf': (True, False),
+        'clf__alpha': (1e-2, 1e-3),
+    }
+
+
+    gs_clf = GridSearchCV(pipeline,
+                          parameters,
+                          n_jobs=3)
+
+    gs_clf = gs_clf.fit(list(pipeline_input.train_docs()),
+                        pipeline_input.train_doc_categories())
+
+    predicted_cats = gs_clf.predict(pipeline_input.test_docs())
     test_doc_categories = np.array(pipeline_input.test_doc_categories())
 
     mean = np.mean(predicted_cats == test_doc_categories)
     logging.info('Average success rate {:.3f}.'.format(mean))
+
+    best_score = gs_clf.best_score_
+    print('best-score', best_score)
+
+    for param_name in sorted(parameters.keys()):
+        print('best-score-param {} : {}'.format(param_name, gs_clf.best_params_[param_name]))
 
     report = metrics.classification_report(predicted_cats,
                                            test_doc_categories)

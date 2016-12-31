@@ -10,8 +10,8 @@ from sklearn.pipeline import Pipeline
 def baseline_pipeline():
     return Pipeline(
         [
-            ('vect', CountVectorizer()),
-            # ('tfidf', TfidfTransformer()),
+            ('vect', CountVectorizer(ngram_range=(1,2))),
+            # ('tfidf', TfidfTransformer(use_idf=False)),
             ('clf', MultinomialNB()),
         ])
 
@@ -19,8 +19,8 @@ def baseline_pipeline():
 def svm_pipeline():
     return Pipeline(
         [
-            ('vect', CountVectorizer()),
-            # ('tfidf', TfidfTransformer()),
+            ('vect', CountVectorizer(ngram_range=(1,2))),
+            # ('tfidf', TfidfTransformer(use_idf=False)),
             ('clf', SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, n_iter=5, random_state=42)),
         ]
     )

@@ -5,7 +5,8 @@ import os.path
 from argparse import ArgumentParser
 from ad_finder.learn.skl import (
     PipelineInput,
-    run
+    run,
+    run_grid_optimization
 )
 
 logging.basicConfig(stream=sys.stdout,
@@ -46,8 +47,10 @@ def main():
                                    test_fraction,
                                    max_doc_count)
 
-    run(pipeline_input,
-        pipeline_name)
+    # run(pipeline_input,
+    #     pipeline_name)
+    run_grid_optimization(pipeline_input,
+                          pipeline_name)
 
 if __name__ == '__main__':
     main()

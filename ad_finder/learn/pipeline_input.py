@@ -1,4 +1,5 @@
 import os.path
+import numpy as np
 from itertools import chain
 from ad_finder.parse.classification import parse_classifications
 from ad_finder.util.zip_util import (
@@ -43,41 +44,34 @@ class PipelineInput(object):
     def test_doc_categories(self):
         return list(self._category_iter(True))
 
-    def _do_skip(self, name):
-        return not name in self.classification_dict
+    def _do_skip(self, name, skip_train, count):
+        if len(name) == 0:
+            return True
+        if self.max_doc_count != -1 and self.max_doc_count < count:
+            raise StopIteration
+        if not name in self.classification_dict:
+            return True
+        if skip_train and count % self.n_skip != 0:
+            return True
+        if not skip_train and not count % self.n_skip:
+            return True
+        return False
 
     def _doc_iter(self, skip_train):
         count = 0
         doc_iterables = [zip_open_all(path) for path in self.doc_zip_paths]
         for name, f_handle in chain(*doc_iterables):
             last_name = os.path.basename(name)
-            if len(last_name) == 0:
-                continue
-            if not self._do_skip(last_name):
-                count += 1
-                if self.max_doc_count != -1 and self.max_doc_count < count:
-                    break
-                if skip_train and count % self.n_skip != 0:
-                    continue
-                if not skip_train and not count % self.n_skip:
-                    continue
+            if not self._do_skip(last_name, skip_train, count):
                 lines = f_handle.readlines()
                 yield ''.join(lines)
+            count += 1
 
     def _category_iter(self, skip_train):
         count = 0
         doc_namelists = [get_namelist(path) for path in self.doc_zip_paths]
         for name in chain(*doc_namelists):
             last_name = os.path.basename(name)
-            if len(last_name) == 0:
-                continue
-            if not self._do_skip(last_name):
-                count += 1
-                if self.max_doc_count != -1 and self.max_doc_count < count:
-                    break
-                if skip_train and count % self.n_skip != 0:
-                    continue
-                if not skip_train and not count % self.n_skip:
-                    continue
-
+            if not self._do_skip(last_name, skip_train, count):
                 yield int(self.classification_dict[last_name])
+            count += 1

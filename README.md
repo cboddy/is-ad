@@ -38,3 +38,32 @@ avg / total       0.94      0.91      0.93      5555
           1       0.25      0.30      0.27       435
 
 avg / total       0.89      0.88      0.88      5555
+
+
+##### svm v0.2
+12/31/2016 10:12:16 AM Average success rate 0.814.
+             precision    recall  f1-score   support
+
+          0       0.84      0.95      0.89       878
+          1       0.61      0.29      0.39       230
+
+avg / total       0.79      0.81      0.79      1108
+
+
+### svm v0.3
+grid-search, text-extracted, 5000 docs
+2/31/2016 10:37:54 AM Average success rate 0.850.
+('best-score', 0.89499774673276256)
+best-score-param clf__alpha : 0.01
+best-score-param vect__ngram_range : (1, 2)
+             precision    recall  f1-score   support
+
+          0       0.90      0.93      0.91       481
+          1       0.41      0.35      0.38        72
+
+avg / total       0.84      0.85      0.84       553
+
+
+Process finished with exit code 0
+
+
