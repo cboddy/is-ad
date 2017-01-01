@@ -4,7 +4,7 @@ import time
 import zipfile
 from functools import wraps
 
-from ad_finder.util.zip_util import zip_open_all
+from ad_finder.util.zip_util import zip_iter
 from bs4 import BeautifulSoup
 
 NON_VISIBLE_LABELS = ['style', 'script', '[document]', 'head', 'title']
@@ -29,7 +29,7 @@ def log_time(func):
 
 @log_time
 def parse_zip(zip_path, text_consumer):
-    for name, z_open in zip_open_all(zip_path):
+    for name, z_open in zip_iter(zip_path):
         text = parse_texts(z_open)
         text_consumer(name, text)
 
@@ -80,7 +80,7 @@ def _is_visible(element):
 def unzip_and_extract_text(zip_path, output_path):
     logging.info('Running  text extraction for {} -> {}'.format(zip_path, output_path))
     with zipfile.ZipFile(output_path, 'w', allowZip64=True) as z_out:
-            for name, iterator in zip_open_all(zip_path):
+            for name, iterator in zip_iter(zip_path):
                 LOG.debug('Writing {}'.format(name))
                 try:
                     texts = parse_texts(iterator)

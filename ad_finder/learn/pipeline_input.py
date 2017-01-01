@@ -3,7 +3,7 @@ import numpy as np
 from itertools import chain
 from ad_finder.parse.classification import parse_classifications
 from ad_finder.util.zip_util import (
-    zip_open_all,
+    zip_iter,
     get_namelist
 )
 
@@ -51,15 +51,17 @@ class PipelineInput(object):
             raise StopIteration
         if not name in self.classification_dict:
             return True
-        if skip_train and count % self.n_skip != 0:
+
+        is_train = (count % self.n_skip) != 0
+        if skip_train and is_train:
             return True
-        if not skip_train and not count % self.n_skip:
+        if not skip_train and is_train:
             return True
         return False
 
     def _doc_iter(self, skip_train):
         count = 0
-        doc_iterables = [zip_open_all(path) for path in self.doc_zip_paths]
+        doc_iterables = [zip_iter(path) for path in self.doc_zip_paths]
         for name, f_handle in chain(*doc_iterables):
             last_name = os.path.basename(name)
             if not self._do_skip(last_name, skip_train, count):

@@ -1,6 +1,8 @@
 import sys
 import logging
 import os
+import pickle
+import gzip
 import os.path
 from argparse import ArgumentParser
 from ad_finder.learn.skl import (
@@ -22,6 +24,7 @@ def main():
     parser.add_argument('--test_fraction', help='Fraction of docs used for testing.', type=float, default=0.1)
     parser.add_argument('--pipeline', help='Name of pipeline', type=str, default='baseline')
     parser.add_argument('--max_doc_count', help='Maximum number of documents to use.', type=int, default=-1)
+    parser.add_argument('--output_path', help='Path to save text-classification model.', type=str, required=False)
     args = parser.parse_args()
 
     pipeline_name = args.pipeline
@@ -47,10 +50,19 @@ def main():
                                    test_fraction,
                                    max_doc_count)
 
-    # run(pipeline_input,
-    #     pipeline_name)
-    run_grid_optimization(pipeline_input,
-                          pipeline_name)
+    model, report = run(pipeline_input,
+        pipeline_name)
+
+    if 'output_path' in args:
+        output_path = args.output_path
+        if not output_path.endswith('.gz'):
+            output_path += '.gz'
+        logging.info('Writing output model to {}'.format(output_path))
+        with gzip.open(output_path, 'w') as f:
+            pickle.dump(model, f)
+
+    # run_grid_optimization(pipeline_input,
+    #                       pipeline_name)
 
 if __name__ == '__main__':
     main()

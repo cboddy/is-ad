@@ -11,6 +11,7 @@ bs4
 ### scikit-learn
 
 building a pipeline
+* [feature extraction](http://scikit-learn.org/stable/modules/feature_extraction.html)
 
 ###  ideas
 * bag of words
@@ -57,6 +58,7 @@ grid-search, text-extracted, 5000 docs
 best-score-param clf__alpha : 0.01
 best-score-param vect__ngram_range : (1, 2)
              precision    recall  f1-score   support
+
 
           0       0.90      0.93      0.91       481
           1       0.41      0.35      0.38        72

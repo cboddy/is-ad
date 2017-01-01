@@ -23,7 +23,7 @@ def zip_open(path, name):
             yield f
 
 
-def zip_open_all(path):
+def zip_iter(path):
     count = 0
     with zipfile.ZipFile(path, 'r') as z_file:
         namelist = z_file.namelist()

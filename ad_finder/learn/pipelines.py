@@ -25,10 +25,13 @@ def svm_pipeline():
         ]
     )
 
+_pipeline_dict = {
+    'baseline': baseline_pipeline(),
+    'svm': svm_pipeline()
+}
+
 
 def get_pipeline(name):
-    if name == 'baseline':
-        return baseline_pipeline()
-    if name == 'svm':
-        return svm_pipeline()
-    raise Exception('Unknown pipeline {}'.format(name))
+    if not name in _pipeline_dict:
+        raise ValueError('Unknown pipeline {}, available pipelines {}: '.format(name, _pipeline_dict.keys()))
+    return _pipeline_dict[name]

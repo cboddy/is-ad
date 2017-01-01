@@ -1,5 +1,7 @@
 import logging
 import numpy as np
+import gzip
+import pickle
 from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
 from ad_finder.learn.pipelines import get_pipeline
@@ -33,7 +35,9 @@ def run(pipeline_input,
 
     report = metrics.classification_report(predicted_cats,
                                            test_doc_categories)
-    print(report)
+
+    logging.info(report)
+    return text_clf, report
 
 
 def run_grid_optimization(pipeline_input,
@@ -70,3 +74,25 @@ def run_grid_optimization(pipeline_input,
     report = metrics.classification_report(predicted_cats,
                                            test_doc_categories)
     print(report)
+
+
+def read_model(text_cf_path):
+    """
+    De-serialize model from file.
+
+    Parameters
+    ----------
+    text_cf_path: `str`
+        Path to pickled
+
+
+    Returns
+    -------
+    sklearn.pipeline.Pipeline
+    """
+    if text_cf_path.endswith('.gz'):
+        with gzip.open(text_cf_path, 'rb') as f:
+            return pickle.load(f)
+    else:
+        with open(text_cf_path, 'rb') as f:
+            return pickle.load(f)
