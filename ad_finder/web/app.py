@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.is_initialized = False
 
 _version = 'v0.1'
-_api_prefix = '/api/{}/classify/'.format(_version)
+_api_prefix = '/api/{}/categorize/'.format(_version)
 
 
 def init(text_cf):
