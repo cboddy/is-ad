@@ -53,6 +53,9 @@ def main():
     model, report = run(pipeline_input,
         pipeline_name)
 
+    # run_grid_optimization(pipeline_input,
+    #                       pipeline_name)
+
     if 'output_path' in args:
         output_path = args.output_path
         if not output_path.endswith('.gz'):
@@ -61,8 +64,6 @@ def main():
         with gzip.open(output_path, 'w') as f:
             pickle.dump(model, f)
 
-    # run_grid_optimization(pipeline_input,
-    #                       pipeline_name)
 
 if __name__ == '__main__':
     main()

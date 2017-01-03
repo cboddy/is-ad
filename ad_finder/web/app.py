@@ -1,3 +1,4 @@
+import re
 from sklearn.base import BaseEstimator
 from flask import (
     Flask,
@@ -13,12 +14,21 @@ from flask import (
 )
 
 from ad_finder.util.web_util import get
+from ad_finder.parse.html import parse_text
 
 app = Flask(__name__)
 app.is_initialized = False
 
 _version = 'v0.1'
 _api_prefix = '/api/{}/categorize/'.format(_version)
+
+_url_regex = re.compile(
+        r'^(http)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
 def init(text_cf):
@@ -39,6 +49,11 @@ def init(text_cf):
     app.is_initialized = True
 
 
+def _is_valid_url(url):
+    """Is url a valid URL that starts http(s)://"""
+    return _url_regex.match(url) is not None
+
+
 def _predict(text):
     """Categorise text.
     0 : not an ad.
@@ -54,11 +69,8 @@ def _predict(text):
     flask.Response
         To send to client.
     """
-    print('text')
-    print(text)
-
-    classification = app.text_cf.predict([text])
-    return jsonify({'category': classification[0]})
+    category = app.text_cf.predict([text])[0]
+    return jsonify({'category': category})
 
 
 def _ensure_initialized():
@@ -77,7 +89,7 @@ def redirect_to_index():
     return static_content('index.html')
 
 
-@app.route(_api_prefix + 'text', methods=['PUT'])
+@app.route(_api_prefix + 'text', methods=['POST'])
 def classify_text():
     _ensure_initialized()
     text = request.data
@@ -86,11 +98,16 @@ def classify_text():
     return _predict(text)
 
 
-@app.route(_api_prefix + 'url')
+@app.route(_api_prefix + 'url', methods=['GET'])
 def classify_url():
     _ensure_initialized()
     url = request.args.get('url', None)
     if url is None:
         return 'Missing query parameter: url', 400
+    if not _is_valid_url(url):
+        return 'Specified url "{}" is not valid or does not start http(s)://'.format(url), 400
+
     page = get(url)
-    return _predict(page)
+    text = parse_text(page)
+    return _predict(text)
+

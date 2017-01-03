@@ -30,7 +30,7 @@ def log_time(func):
 @log_time
 def parse_zip(zip_path, text_consumer):
     for name, z_open in zip_iter(zip_path):
-        text = parse_texts(z_open)
+        text = parse_text(z_open)
         text_consumer(name, text)
 
 
@@ -52,6 +52,11 @@ def parse_texts(iterator):
     text_elements = soup.findAll(text=True)
     visible_texts = [elem for elem in text_elements if _is_visible(elem)]
     return visible_texts
+
+
+def parse_text(iterator):
+    texts = parse_texts(iterator)
+    return ' '.join(texts)
 
 
 def _is_visible(element):
@@ -83,8 +88,7 @@ def unzip_and_extract_text(zip_path, output_path):
             for name, iterator in zip_iter(zip_path):
                 LOG.debug('Writing {}'.format(name))
                 try:
-                    texts = parse_texts(iterator)
-                    text = ''.join(texts).encode('utf-8')
+                    text = parse_text(iterator).encode('utf-8')
                 except Exception:
                     logging.error('Problem extracting text from {}/{}'.format(zip_path, name), exc_info=True)
                     continue

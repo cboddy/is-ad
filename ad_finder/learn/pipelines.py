@@ -11,7 +11,7 @@ def baseline_pipeline():
     return Pipeline(
         [
             ('vect', CountVectorizer(ngram_range=(1,2))),
-            # ('tfidf', TfidfTransformer(use_idf=False)),
+            # ('tfidf', TfidfTransformer()),
             ('clf', MultinomialNB()),
         ])
 
@@ -20,8 +20,8 @@ def svm_pipeline():
     return Pipeline(
         [
             ('vect', CountVectorizer(ngram_range=(1,2))),
-            # ('tfidf', TfidfTransformer(use_idf=False)),
-            ('clf', SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, n_iter=5, random_state=42)),
+            # ('tfidf', TfidfTransformer()),
+            ('clf', SGDClassifier(loss='hinge', penalty='l2', alpha=1e-2, n_iter=10, random_state=666)),
         ]
     )
 

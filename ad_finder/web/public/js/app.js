@@ -14,10 +14,11 @@ function submit(){
                 $('#modal_id').modal()
                 return
         }
+
         if (has_text) 
-                submit_url(doc_url);
-        else 
                 submit_text(doc_text);
+        else 
+                submit_url(doc_url);
 }
 
 
@@ -27,6 +28,7 @@ function non_empty(str) {
 
 
 function submit_url(doc_url) {
+    console.log('submitting url ' + doc_url);
     $.get({
         url: '/api/'+API_VERSION+'/categorize/url',
         data: {
@@ -39,6 +41,7 @@ function submit_url(doc_url) {
 }
 
 function submit_text(doc_text) {
+    console.log('submitting url ' + doc_text);
     $.post({
         url: '/api/'+API_VERSION+'/categorize/text',
         data: doc_text,

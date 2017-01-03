@@ -52,7 +52,7 @@ avg / total       0.79      0.81      0.79      1108
 
 
 ### svm v0.3
-grid-search, text-extracted, 5000 docs
+##### grid-search, text-extracted, 5000 docs
 2/31/2016 10:37:54 AM Average success rate 0.850.
 ('best-score', 0.89499774673276256)
 best-score-param clf__alpha : 0.01
@@ -66,7 +66,30 @@ best-score-param vect__ngram_range : (1, 2)
 avg / total       0.84      0.85      0.84       553
 
 
-### todo
-* try html parser in sklearn instead of bs4
+
+
+**unicode html text-extraction helped!**
+
+### svm v0.21 
+01/03/2017 12:45:52 PM              precision    recall  f1-score   support
+
+          0       0.99      0.98      0.99      6810
+          1       0.85      0.94      0.89       686
+         
+avg / total       0.98      0.98      0.98      7496
+
+
+### baseline v0.21
+01/03/2017 12:52:09 PM Average success rate 0.963.
+01/03/2017 12:52:09 PM              precision    recall  f1-score   support
+
+          0       0.99      0.97      0.98      6917
+          1       0.70      0.91      0.79       579
+
+avg / total       0.97      0.96      0.97      7496
+
+
+
+
 
 
