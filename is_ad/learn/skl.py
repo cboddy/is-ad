@@ -4,8 +4,8 @@ import gzip
 import pickle
 from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
-from ad_finder.learn.pipelines import get_pipeline
-from ad_finder.learn.pipeline_input import PipelineInput
+from is_ad.learn.pipelines import get_pipeline
+from is_ad.learn.pipeline_input import PipelineInput
 
 LOG = logging.getLogger(__name__)
 

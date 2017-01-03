@@ -1,6 +1,6 @@
 import os.path
 
-from ad_finder.parse.html import (
+from is_ad.parse.html import (
     parse_texts,
     parse_zip
 )

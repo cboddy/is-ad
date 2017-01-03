@@ -1,5 +1,5 @@
 import os.path
-from ad_finder.parse.classification import (
+from is_ad.parse.classification import (
     _parse,
     parse_classifications
 )

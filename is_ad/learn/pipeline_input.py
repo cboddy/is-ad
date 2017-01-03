@@ -1,8 +1,8 @@
 import os.path
 import numpy as np
 from itertools import chain
-from ad_finder.parse.classification import parse_classifications
-from ad_finder.util.zip_util import (
+from is_ad.parse.classification import parse_classifications
+from is_ad.util.zip_util import (
     zip_iter,
     get_namelist
 )

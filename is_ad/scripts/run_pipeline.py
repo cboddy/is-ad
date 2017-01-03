@@ -5,7 +5,7 @@ import pickle
 import gzip
 import os.path
 from argparse import ArgumentParser
-from ad_finder.learn.skl import (
+from is_ad.learn.skl import (
     PipelineInput,
     run,
     run_grid_optimization

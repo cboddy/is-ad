@@ -1,4 +1,4 @@
-from ad_finder.util.web_util import get
+from is_ad.util.web_util import get
 
 
 def test_get():

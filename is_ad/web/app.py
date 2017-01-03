@@ -13,8 +13,8 @@ from flask import (
     send_from_directory,
 )
 
-from ad_finder.util.web_util import get
-from ad_finder.parse.html import parse_text
+from is_ad.util.web_util import get
+from is_ad.parse.html import parse_text
 
 app = Flask(__name__)
 app.is_initialized = False

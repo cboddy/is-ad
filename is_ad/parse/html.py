@@ -4,7 +4,7 @@ import time
 import zipfile
 from functools import wraps
 
-from ad_finder.util.zip_util import zip_iter
+from is_ad.util.zip_util import zip_iter
 from bs4 import BeautifulSoup
 
 NON_VISIBLE_LABELS = ['style', 'script', '[document]', 'head', 'title']

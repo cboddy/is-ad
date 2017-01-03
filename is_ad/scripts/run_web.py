@@ -2,8 +2,8 @@ import sys
 import logging
 import argparse
 
-from ad_finder.learn.skl import read_model
-from ad_finder.web.app import (
+from is_ad.learn.skl import read_model
+from is_ad.web.app import (
     app,
     init
 )

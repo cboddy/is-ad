@@ -55,11 +55,10 @@ function submit_text(doc_text) {
 function submit_success(response) {
     var cat = response['category']
     var is_ad = cat == 1;
-    console.log('cat' + cat + 'is_ad ' + is_ad);
+    console.log(response)
     var msg = '<p>This <strong>IS</strong> an advertorial.</p>';
     if (! is_ad)     
         msg = msg.replace('IS', 'IS NOT');
-    console.log(response)
     $('#modal_title').text('Result')
     $('#modal_body').html(msg)
     $('#modal_id').modal()

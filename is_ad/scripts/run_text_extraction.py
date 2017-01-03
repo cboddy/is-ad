@@ -4,7 +4,7 @@ import os
 import os.path
 from argparse import ArgumentParser
 from multiprocessing import Pool
-from ad_finder.parse.html import unzip_and_extract_text
+from is_ad.parse.html import unzip_and_extract_text
 
 logging.basicConfig(stream=sys.stdout,
                     format='%(asctime)s %(message)s',

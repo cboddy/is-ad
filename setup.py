@@ -5,7 +5,7 @@ setup(
         description="Text categorization: ad or no ad.",
         author="Chris Boddy",
         license="MIT",
-        packages=["ad_finder"],
+        packages=["is_ad"],
         zip_safe=True,
         install_requires=[
             'numpy',
