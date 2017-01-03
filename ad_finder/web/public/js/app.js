@@ -53,13 +53,22 @@ function submit_text(doc_text) {
 }
 
 function submit_success(response) {
-    console.log('response')
+    var cat = response['category']
+    var is_ad = cat == 1;
+    console.log('cat' + cat + 'is_ad ' + is_ad);
+    var msg = '<p>This <strong>IS</strong> an advertorial.</p>';
+    if (! is_ad)     
+        msg = msg.replace('IS', 'IS NOT');
     console.log(response)
+    $('#modal_title').text('Result')
+    $('#modal_body').html(msg)
+    $('#modal_id').modal()
 }
 
-function submit_error(xhr) {
-    console.log('error')
-    console.log(xhr)
+function submit_error(xhr, status, error) {
+    $('#modal_title').text('Error')
+    $('#modal_body').text(xhr.responseText)
+    $('#modal_id').modal()
 }
 
 $('#submit_cat_id').on('click', submit);
