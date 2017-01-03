@@ -1,5 +1,3 @@
-import pickle
-import gzip
 from sklearn.base import BaseEstimator
 from flask import (
     Flask,
@@ -42,14 +40,14 @@ def init(text_cf):
 
 
 def _predict(text):
-    """Classify text.
+    """Categorise text.
     0 : not an ad.
     1: is an ad.
 
     Parameters
     ----------
     text: `str`
-        The text to be classified.
+        The text to be categorised.
 
     Returns
     -------
@@ -60,7 +58,7 @@ def _predict(text):
     print(text)
 
     classification = app.text_cf.predict([text])
-    return jsonify({'class': classification[0]})
+    return jsonify({'category': classification[0]})
 
 
 def _ensure_initialized():

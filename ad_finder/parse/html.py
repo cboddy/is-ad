@@ -67,7 +67,7 @@ def _is_visible(element):
     bool
         True iff element holds visible text
     """
-    as_str = str(element)
+    as_str = unicode(element)
     if element.parent.name in NON_VISIBLE_LABELS:
         return False
     if re.match('<!--.*-->', as_str):
@@ -84,7 +84,7 @@ def unzip_and_extract_text(zip_path, output_path):
                 LOG.debug('Writing {}'.format(name))
                 try:
                     texts = parse_texts(iterator)
-                    text = ''.join(texts)
+                    text = ''.join(texts).encode('utf-8')
                 except Exception:
                     logging.error('Problem extracting text from {}/{}'.format(zip_path, name), exc_info=True)
                     continue

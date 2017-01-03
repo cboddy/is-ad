@@ -1,6 +1,7 @@
 numpy
 scipy
 scikit-learn
-BeautifulSoup
+bs4
+lxml
 pytest
 flask

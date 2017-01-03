@@ -66,6 +66,7 @@ best-score-param vect__ngram_range : (1, 2)
 avg / total       0.84      0.85      0.84       553
 
 
-Process finished with exit code 0
+### todo
+* try html parser in sklearn instead of bs4
 
 
