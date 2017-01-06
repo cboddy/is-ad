@@ -2,6 +2,7 @@ import sys
 import logging
 import os
 import pickle
+# import dill as pickle # required to pickle HahsingVectorizer analyser function
 import gzip
 import os.path
 from argparse import ArgumentParser
@@ -33,7 +34,10 @@ def main():
     max_doc_count = args.max_doc_count
 
     if os.path.isdir(args.docs):
-        input_files = [os.listdir(args.docs)]
+        input_files = [os.path.join(args.docs, name)
+                       for name in os.listdir(args.docs)]
+        if len(input_files) == 0:
+            raise ValueError('Input directory {} is empty.'.format(args.docs))
     elif os.path.isfile(args.docs):
         input_files = [args.docs]
     else:
@@ -55,13 +59,12 @@ def main():
 
     # run_grid_optimization(pipeline_input,
     #                       pipeline_name)
-
     if 'output_path' in args:
         output_path = args.output_path
         if not output_path.endswith('.gz'):
             output_path += '.gz'
         logging.info('Writing output model to {}'.format(output_path))
-        with gzip.open(output_path, 'w') as f:
+        with gzip.open(output_path, 'wb') as f:
             pickle.dump(model, f)
 
 
