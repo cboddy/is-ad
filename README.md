@@ -36,6 +36,12 @@ avg / total       0.97      0.96      0.97      7496
 
 
 
+### svm v0.27
 
+01/07/2017 10:28:53 AM Average success rate 0.989.
+01/07/2017 10:28:53 AM              precision    recall  f1-score   support
 
+          0       1.00      0.99      0.99     34225
+          1       0.89      0.99      0.94      3217
 
+avg / total       0.99      0.99      0.99     37442

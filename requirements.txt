@@ -7,3 +7,4 @@ pytest
 flask
 dill
 marisa_trie
+sqlalchemy

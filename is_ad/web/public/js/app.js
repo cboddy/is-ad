@@ -41,7 +41,7 @@ function submit_url(doc_url) {
 }
 
 function submit_text(doc_text) {
-    console.log('submitting url ' + doc_text);
+    console.log('submitting text ' + doc_text);
     $.post({
         url: '/api/'+API_VERSION+'/categorize/text',
         data: doc_text,
@@ -71,3 +71,5 @@ function submit_error(xhr, status, error) {
 }
 
 $('#submit_cat_id').on('click', submit);
+$('#text_submit_id').on('click', submit);
+$('#url_submit_id').on('click', submit);
