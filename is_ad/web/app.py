@@ -1,4 +1,5 @@
 import re
+import os.path
 from sklearn.base import BaseEstimator
 from flask import (
     Flask,
@@ -15,6 +16,16 @@ from flask import (
 
 from is_ad.util.web_util import get
 from is_ad.parse.html import parse_text
+from is_ad.model.dao.common import (
+    get_engine,
+    configure
+)
+from is_ad.model.dao.app_dao import (
+    add_document,
+    add_view,
+    get_document,
+    ensure_model_present
+)
 
 app = Flask(__name__)
 app.is_initialized = False
@@ -31,7 +42,9 @@ _url_regex = re.compile(
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
-def init(text_cf):
+def init(text_cf,
+         name,
+         db_url):
     """
     Initialize the web-app.
 
@@ -39,10 +52,20 @@ def init(text_cf):
     ----------
     text_cf: `sklearn.base.BaseEstimator`
         Text classification model.
+    name: `str`
+        Classification model name
+    db_url: `str`
+        Url to DB resource.
     """
     if app.is_initialized:
         raise ValueError('App is already initialized.')
-
+    # setup DB engine
+    db_engine = get_engine(db_url)
+    configure(db_engine)
+    # setup model name and ensure present in DB
+    ensure_model_present(name)
+    app.name = name
+    # setup text classifier
     if not isinstance(text_cf, BaseEstimator):
         raise ValueError('classification model {}:{} is not a BaseEstimator'.format(text_cf, type(text_cf)))
     app.text_cf = text_cf
@@ -54,22 +77,20 @@ def _is_valid_url(url):
     return _url_regex.match(url) is not None
 
 
-def _predict(text):
-    """Categorise text.
-    0 : not an ad.
-    1: is an ad.
+def _get_response(category):
+    """Build text categorisation response.
 
     Parameters
     ----------
-    text: `str`
-        The text to be categorised.
+    category: int
+        0 : not an ad.
+        1: is an ad.
 
     Returns
     -------
     flask.Response
         To send to client.
     """
-    category = app.text_cf.predict([text])[0]
     return jsonify({'category': category})
 
 
@@ -95,7 +116,8 @@ def classify_text():
     text = request.data
     if text is None:
         return 'Missing request data : no text to classify', 400
-    return _predict(text)
+    category = app.text_cf.predict([text])[0]
+    return _get_response(category)
 
 
 @app.route(_api_prefix + 'url', methods=['GET'])
@@ -107,7 +129,12 @@ def classify_url():
     if not _is_valid_url(url):
         return 'Specified url "{}" is not valid or does not start http(s)://'.format(url), 400
 
-    page = get(url)
-    text = parse_text(page)
-    return _predict(text)
+    doc = get_document(url, app.name)
+    if doc is None:
+        page = get(url)
+        text = parse_text(page)
+        category = app.text_cf.predict([text])[0]
+        doc = add_document(text, category, url, app.name)
 
+    add_view(doc.id)
+    return _get_response(doc.category)

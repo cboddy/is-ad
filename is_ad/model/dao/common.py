@@ -22,8 +22,7 @@ def configure(engine=None):
     """
     if engine is None:
         engine = get_engine()
-        create_schema(engine)
-
+    create_schema(engine)
     Session.configure(bind=engine)
 
 

@@ -1,6 +1,5 @@
 import logging
 import datetime
-from sqlalchemy.orm import defer
 from is_ad.model.dao.common import session_scope
 from is_ad.model.document import Document
 from is_ad.model.model import Model
@@ -33,7 +32,6 @@ def get_document(url, model_name, with_session=None):
             .first()
 
 
-
 def add_view(doc_id,
              timestamp=None,
              with_session=None):
@@ -52,16 +50,24 @@ def add_view(doc_id,
 
     """
     if timestamp is None:
-        timestamp == datetime.datetime()
+        timestamp = datetime.datetime.now()
 
     with session_scope(with_session) as session:
-        session.add(View(doc_id,
-                         timestamp))
+        session.add(View(document_id=doc_id,
+                         timestamp=timestamp))
 
 
 def add_model(name):
     with session_scope() as session:
         session.add(Model(name=name))
+
+
+def ensure_model_present(name):
+    with session_scope() as session:
+        has_model = session.query(Model).filter_by(name=name).first() is not None
+        if not has_model:
+            LOG.info('Adding new model {}'.format(name))
+            add_model(name)
 
 
 def add_document(text,
