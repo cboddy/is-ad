@@ -6,21 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/spinner.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="jumbotron text-center">
-    <a href="https://github.com/cboddy/is-ad"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/121cd7cbdc3e4855075ea8b558508b91ac463ac2/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png"></a>
+    <a href="https://github.com/cboddy/is-ad"><img style="position: absolute; top: 0; left: 0; border: 0;"
+                                                   src="https://camo.githubusercontent.com/121cd7cbdc3e4855075ea8b558508b91ac463ac2/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677265656e5f3030373230302e706e67"
+                                                   alt="Fork me on GitHub"
+                                                   data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png"></a>
     <h1>Is it an Ad?</h1>
     <p>Something something native-content.</p>
 </div>
 
 <div class="container">
+
+
     <div class="form-group">
         <div class="form-group">
             <div class="input-group">
-                <span id="url_submit_id" class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+                <span id="url_submit_id" class="input-group-addon"><i
+                        class="glyphicon glyphicon-chevron-right"></i></span>
                 <input type="text" placeholder="Add link..." class="form-control" id="doc_url">
             </div>
         </div>
@@ -33,6 +40,35 @@
         </div>
 
         <button id='submit_cat_id' class="btn btn-default center-block">Is it an ad?</button>
+    </div>
+
+    <div hidden class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <div id='show_classification_id' class="jumbotron text-center">
+        <h3>Document classification</h3>
+        <div id="show_classification_body_id"></div>
+    </div>
+    <div id='feedback_request_id' class="jumbotron text-center">
+        <div>
+            <h3>How did we do?</h3>
+            <div class="btn-group">
+                <button id='submit_feedback_true_id' type="button" class="btn btn-success">Yep, bang on the money.
+                </button>
+                <button id='submit_feedback_true_false' type="button" class="btn btn-danger">Nope that's clearly
+                    wrong.
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id='feedback_response_id' class="jumbotron text-center">
+        <h3 id="feedback_header_id"></h3>
+        <p id="feedback_body_id"></p>
     </div>
 </div>
 
@@ -51,6 +87,7 @@
         </div>
     </div>
 </div>
+
 <script src="js/app.js"></script>
 </body>
 </html>

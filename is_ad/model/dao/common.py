@@ -9,6 +9,8 @@ LOG = logging.getLogger(__name__)
 
 Base = declarative_base()
 Session = sessionmaker(expire_on_commit=False)
+TRUE = {'True', 'true'}
+FALSE = {'False', 'false'}
 
 
 def configure(engine=None):
@@ -54,7 +56,6 @@ def create_schema(engine):
     from is_ad.model.document import Document
     from is_ad.model.view import View
 
-
     Base.metadata.create_all(engine)
 
 
@@ -88,3 +89,11 @@ def session_scope(with_session=None):
         raise
     finally:
         with_session.expunge_all()
+
+
+def parse_boolean(s):
+    if s in TRUE:
+        return True
+    if s in FALSE:
+        return False
+    raise ValueError('Could not parse {} as boolean.')

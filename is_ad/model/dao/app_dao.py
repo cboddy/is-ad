@@ -40,6 +40,7 @@ def add_view(doc_id,
     Parameters
     ----------
     doc_id: `int`
+        Id of the document viewed.
     timestamp: datetime.datetime
         Defaults to `now` when None.
     with_session: `sqlalchemy.Session`
@@ -47,14 +48,15 @@ def add_view(doc_id,
 
     Returns
     -------
-
+    View
     """
     if timestamp is None:
         timestamp = datetime.datetime.now()
 
     with session_scope(with_session) as session:
-        session.add(View(document_id=doc_id,
-                         timestamp=timestamp))
+        view = View(document_id=doc_id, timestamp=timestamp)
+        session.add(view)
+    return view
 
 
 def add_model(name):
@@ -87,3 +89,11 @@ def add_document(text,
                             model_id=model.id)
         session.add(document)
         return document
+
+
+def update_feedback(view_id, feedback):
+    """Update the feedback of View rows matching an id."""
+    with session_scope() as session:
+        session.query(View)\
+            .filter(View.id == view_id)\
+            .update({View.user_feedback: feedback})
